@@ -68,6 +68,9 @@ main {
   }
   jobs {
     ["publish"] = (baseJob) {
+      permissions {
+        contents = "write"
+      }
       steps {
         new {
           name = "Run publish"

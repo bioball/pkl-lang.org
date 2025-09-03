@@ -11,6 +11,8 @@ name: Build (main)
   repository_dispatch: {}
 jobs:
   publish:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
