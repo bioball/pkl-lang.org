@@ -1,0 +1,41 @@
+# Do not modify!
+# This file was generated from a template using https://github.com/StefMa/pkl-gha
+
+name: Build (main)
+'on':
+  push:
+    branches:
+    - main
+    tags-ignore:
+    - '*'
+  repository_dispatch: {}
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: temurin
+        cache: gradle
+    - name: Setup Rust
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+    - name: Configure cargo
+      run: |-
+        cat <<EOF > ~/.cargo/config
+        [net]
+        git-fetch-with-cli = true
+        EOF
+    - name: Run publish
+      run: |-
+        ./gradlew \
+          --console=plain \
+          pklHtmlHighlighter
+
+        ./gradlew \
+          --console=plain \
+          npmInstall buildRemoteSite publishRemoteSite
