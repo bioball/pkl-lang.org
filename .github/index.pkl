@@ -64,8 +64,15 @@ build = buildAndTest
 
 main {
   on {
-    repository_dispatch {}
-    workflow_dispatch {}
+    workflow_dispatch {
+      inputs {
+        ["source_repo"] {
+          type = "string"
+          required = false
+          description = "The source repo triggering this build"
+        }
+      }
+    }
   }
   jobs {
     ["publish"] = (baseJob) {
@@ -73,6 +80,13 @@ main {
         contents = "write"
       }
       steps {
+        new {
+          name = "Triggered by"
+          `if` = "inputs.source_repo != null"
+          run = """
+            echo "Triggered by workflow in repo '${{ inputs.source_repo }}'"
+            """
+        }
         new {
           name = "Run publish"
           // language=bash

@@ -8,8 +8,12 @@ name: Build (main)
     - main
     tags-ignore:
     - '*'
-  repository_dispatch: {}
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: The source repo triggering this build
+        required: false
+        type: string
 jobs:
   publish:
     permissions:
@@ -35,6 +39,9 @@ jobs:
         [net]
         git-fetch-with-cli = true
         EOF
+    - name: Triggered by
+      if: inputs.source_repo != null
+      run: echo "Triggered by workflow in repo '${{ inputs.source_repo }}'"
     - name: Run publish
       run: |-
         ./gradlew \
