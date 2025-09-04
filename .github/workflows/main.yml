@@ -9,6 +9,7 @@ name: Build (main)
     tags-ignore:
     - '*'
   repository_dispatch: {}
+  workflow_dispatch: {}
 jobs:
   publish:
     permissions:

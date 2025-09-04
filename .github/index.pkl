@@ -65,6 +65,7 @@ build = buildAndTest
 main {
   on {
     repository_dispatch {}
+    workflow_dispatch {}
   }
   jobs {
     ["publish"] = (baseJob) {
